@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Recomendaciones gastronómicas y consejos para viajar a Tenerife.">
+  <title>Recomendaciones | Enrique Espigares</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+
+  <style>
+    .recommendations-page {
+      --cream: #f4f2ec;
+      --paper: #ffffff;
+      --green: #294638;
+      --gold: #d9ad78;
+      --ink: #26332d;
+      --muted: #69716a;
+
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .recommendations-page * {
+      box-sizing: border-box;
+    }
+
+    /* La cabecera utiliza las clases compartidas de style.css */
+
+    .recommendations-page .rec-heading {
+      padding: 55px 24px 48px;
+      text-align: center;
+      background: var(--cream);
+      border-bottom: 1px solid #e5e0d6;
+    }
+
+    .recommendations-page .rec-heading-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .recommendations-page .rec-eyebrow {
+      margin: 0 0 20px;
+      color: #657c69;
+      font-size: 12px;
+      line-height: 1.5;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .recommendations-page .rec-heading h1 {
+      margin: 0 0 20px;
+      color: var(--ink);
+      font-size: clamp(32px, 4vw, 38px);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .recommendations-page .rec-heading .rec-lead {
+      max-width: 790px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.9;
+    }
+
+    .recommendations-page .rec-main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 42px 24px 76px;
+    }
+
+    .recommendations-page .rec-intro {
+      max-width: 1000px;
+      margin: 0 auto 30px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .recommendations-page .rec-accordion {
+      border-top: 1px solid #dedbd2;
+    }
+
+    .recommendations-page .rec-accordion details {
+      border-bottom: 1px solid #dedbd2;
+    }
+
+    .recommendations-page .rec-accordion summary {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) 32px;
+      align-items: center;
+      gap: 18px;
+      padding: 25px 8px;
+      list-style: none;
+      cursor: pointer;
+    }
+
+    .recommendations-page .rec-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .recommendations-page .rec-accordion summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #d8d0c0;
+      border-radius: 50%;
+      color: var(--green);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .recommendations-page .rec-accordion details[open] summary::after {
+      content: "−";
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+
+    .recommendations-page .rec-number {
+      color: #bd9866;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .recommendations-page .rec-summary-title {
+      color: var(--green);
+      font-size: 26px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .recommendations-page .rec-summary-subtitle {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      font-weight: 400;
+    }
+
+    .recommendations-page .rec-panel {
+      padding: 0 20px 32px 80px;
+    }
+
+    .recommendations-page .rec-panel > p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.85;
+    }
+
+    .recommendations-page .rec-panel h3 {
+      margin: 24px 0 9px;
+      color: var(--green);
+      font-size: 20px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .recommendations-page .rec-panel h3:first-child {
+      margin-top: 0;
+    }
+
+    .recommendations-page .rec-food-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .recommendations-page .rec-food-item {
+      padding: 18px 20px;
+      background: var(--cream);
+      border-left: 2px solid #c9a36d;
+    }
+
+    .recommendations-page .rec-food-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .recommendations-page .rec-food-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .recommendations-page .rec-restaurant-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .recommendations-page .rec-restaurant {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px;
+      background: #fff;
+      border: 1px solid #e3dfd5;
+      border-radius: 4px;
+    }
+
+    .recommendations-page .rec-restaurant .rec-tag {
+      margin: 0 0 12px;
+      color: #657c69;
+      font-size: 11px;
+      line-height: 1.5;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .recommendations-page .rec-restaurant h3 {
+      margin: 0 0 10px;
+      color: var(--ink);
+      font-size: 21px;
+      line-height: 1.4;
+    }
+
+    .recommendations-page .rec-restaurant p:not(.rec-tag) {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .recommendations-page .rec-restaurant a {
+      display: inline-block;
+      margin-top: auto;
+      padding: 10px 0 2px;
+      color: var(--green);
+      border: 0;
+      border-bottom: 1px solid transparent;
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .recommendations-page .rec-restaurant a:hover {
+      border-bottom-color: var(--gold);
+    }
+
+    .recommendations-page .rec-callout {
+      margin-top: 22px;
+      padding: 23px 25px;
+      background: var(--green);
+      color: white;
+    }
+
+    .recommendations-page .rec-callout h3 {
+      margin-top: 0;
+      color: white;
+    }
+
+    .recommendations-page .rec-callout p {
+      margin-bottom: 0;
+      color: #e0e5dd;
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .recommendations-page .rec-tip-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .recommendations-page .rec-tip {
+      padding: 22px;
+      border: 1px solid #e3dfd5;
+      background: #fff;
+    }
+
+    .recommendations-page .rec-tip h3 {
+      margin: 0 0 9px;
+      color: var(--green);
+      font-size: 19px;
+    }
+
+    .recommendations-page .rec-tip p,
+    .recommendations-page .rec-tip li {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .recommendations-page .rec-tip ul {
+      padding-left: 20px;
+    }
+
+    .recommendations-page .rec-footer {
+      padding: 27px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      background: #f8f6f0;
+      border-top: 1px solid #e4ded1;
+    }
+
+    .recommendations-page .rec-footer p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 650px) {
+      .recommendations-page .rec-heading {
+        padding: 42px 20px;
+      }
+
+      .recommendations-page .rec-heading h1 {
+        font-size: 31px;
+      }
+
+      .recommendations-page .rec-heading .rec-lead {
+        font-size: 15px;
+      }
+
+      .recommendations-page .rec-main {
+        padding: 28px 16px 55px;
+      }
+
+      .recommendations-page .rec-accordion summary {
+        grid-template-columns: 32px minmax(0, 1fr) 28px;
+        gap: 10px;
+        padding: 21px 0;
+      }
+
+      .recommendations-page .rec-summary-title {
+        font-size: 21px;
+      }
+
+      .recommendations-page .rec-panel {
+        padding: 0 0 26px;
+      }
+
+      .recommendations-page .rec-food-list,
+      .recommendations-page .rec-restaurant-list,
+      .recommendations-page .rec-tip-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .recommendations-page .rec-food-item,
+      .recommendations-page .rec-restaurant,
+      .recommendations-page .rec-tip {
+        padding: 18px;
+      }
+    }
+
+  </style>
+</head>
+
+<body class="recommendations-page">
+
+<header class="header">
+  <a href="index.html" class="logo">ENRIQUE <span>ESPIGARES</span></a>
+
+  <nav class="navigation">
+    <a href="itinerario.html" id="nav-itinerary">Itinerario</a>
+    <a href="recomendaciones.html" id="nav-tenerife">Recomendaciones</a>
+    <a href="historia.html" id="nav-history">Historia</a>
+    <button id="contact-toggle" class="contact-button">Contacto</button>
+    <button id="language-toggle" class="language-button">PL</button>
+  </nav>
+</header>
+
+<section class="rec-heading">
+  <div class="rec-heading-inner">
+    <p class="rec-eyebrow">GUÍA PERSONALIZADA · TENERIFE</p>
+    <h1>Recomendaciones para disfrutar de la isla.</h1>
+    <p class="rec-lead">Qué probar, dónde comer y qué tener en cuenta para aprovechar vuestro viaje en noviembre. Abrid cada apartado cuando lo necesitéis.</p>
+  </div>
+</section>
+
+<main class="rec-main">
+  <p class="rec-intro">Una pequeña guía práctica preparada para la familia Tacikowski. Los apartados se pueden abrir y cerrar para encontrar la información fácilmente durante el viaje.</p>
+
+  <div class="rec-accordion">
+
+    <details id="comida" open>
+      <summary>
+        <span class="rec-number">01</span>
+        <span class="rec-summary-title">Gastronomía canaria
+          <span class="rec-summary-subtitle">Platos típicos, productos locales y sabores que merece la pena probar.</span>
+        </span>
+      </summary>
+
+      <div class="rec-panel">
+        <p>En Tenerife se come muy bien. La cocina canaria combina productos locales, pescado, carnes, recetas caseras y sabores propios del archipiélago.</p>
+
+        <div class="rec-food-list">
+          <div class="rec-food-item"><strong>Papas arrugadas</strong><p>Patatas pequeñas cocidas con sal hasta que la piel queda arrugada. Se acompañan con mojo.</p></div>
+          <div class="rec-food-item"><strong>Mojo rojo o mojo picón</strong><p>Salsa de ajo, aceite y pimiento, con un sabor intenso que puede ser ligeramente picante.</p></div>
+          <div class="rec-food-item"><strong>Mojo verde</strong><p>Salsa que suele prepararse con cilantro o perejil, ajo y aceite. Combina muy bien con patatas y pescado.</p></div>
+          <div class="rec-food-item"><strong>Plátano de Canarias</strong><p>Un producto muy conocido de las islas, dulce y aromático. Probadlo fresco o en algún postre.</p></div>
+          <div class="rec-food-item"><strong>Gofio</strong><p>Harina de cereales tostados que se utiliza en recetas saladas, desayunos y preparaciones dulces.</p></div>
+          <div class="rec-food-item"><strong>Queso asado y almogrote</strong><p>El queso asado se suele acompañar de mojo. El almogrote es una pasta de queso curado típica de La Gomera.</p></div>
+          <div class="rec-food-item"><strong>Carne fiesta y ropa vieja</strong><p>Dos platos tradicionales que podéis encontrar en establecimientos de cocina canaria.</p></div>
+          <div class="rec-food-item"><strong>Pescado fresco</strong><p>En las zonas costeras, preguntad por el pescado del día y las especialidades disponibles.</p></div>
+          <div class="rec-food-item">
+            <strong>Plátano de Canarias</strong>
+            <p>Uno de los productos más conocidos de las islas: dulce, aromático y de sabor intenso. Merece la pena probarlo fresco o en algún postre típico.</p>
+          </div>
+          <div class="rec-food-item"><strong>Bienmesabe</strong><p>Postre dulce preparado principalmente con almendras, azúcar y huevo.</p></div>
+        </div>
+
+        <div class="rec-callout">
+          <h3>Un consejo gastronómico</h3>
+          <p>Preguntad por las especialidades locales del día. La carta depende de cada establecimiento y de los productos disponibles.</p>
+        </div>
+      </div>
+    </details>
+
+    <details id="restaurantes">
+      <summary>
+        <span class="rec-number">02</span>
+        <span class="rec-summary-title">Dónde comer
+          <span class="rec-summary-subtitle">Dos opciones de mayor presupuesto y dos guachinches tradicionales.</span>
+        </span>
+      </summary>
+
+      <div class="rec-panel">
+        <p>Los dos primeros lugares son opciones de mayor presupuesto; los dos últimos son guachinches, establecimientos más informales y generalmente económicos.</p>
+
+        <div class="rec-restaurant-list">
+          <article class="rec-restaurant">
+            <p class="rec-tag">Comida de calidad</p>
+            <h3>Restaurante 1</h3>
+            <p>Una opción para disfrutar de una comida de calidad. El precio puede ser más elevado que en un establecimiento tradicional.</p>
+            <a href="https://maps.app.goo.gl/KwpXQBvba3qDhX586" target="_blank" rel="noopener noreferrer">Ver ubicación en Google Maps ↗</a>
+          </article>
+
+          <article class="rec-restaurant">
+            <p class="rec-tag">Comida de calidad</p>
+            <h3>Restaurante 2</h3>
+            <p>Otra alternativa para disfrutar de una comida especial y de una propuesta gastronómica de calidad.</p>
+            <a href="https://maps.app.goo.gl/xcNE3QdiJpHfpj6X6" target="_blank" rel="noopener noreferrer">Ver ubicación en Google Maps ↗</a>
+          </article>
+
+          <article class="rec-restaurant">
+            <p class="rec-tag">Guachinche canario</p>
+            <h3>Guachinche 1</h3>
+            <p>Una oportunidad para probar la cocina tradicional de Tenerife en un ambiente más sencillo y cercano.</p>
+            <a href="https://maps.app.goo.gl/8K58NPVNAq8emM777" target="_blank" rel="noopener noreferrer">Ver ubicación en Google Maps ↗</a>
+          </article>
+
+          <article class="rec-restaurant">
+            <p class="rec-tag">Guachinche canario</p>
+            <h3>Guachinche 2</h3>
+            <p>Otra opción para descubrir platos caseros y disfrutar de una comida local sin necesidad de un restaurante formal.</p>
+            <a href="https://maps.app.goo.gl/ZcE2bj9entLCiEL78" target="_blank" rel="noopener noreferrer">Ver ubicación en Google Maps ↗</a>
+          </article>
+        </div>
+
+        <div class="rec-callout">
+          <h3>¿Qué es un guachinche?</h3>
+          <p>Son establecimientos ligados a la tradición gastronómica de Tenerife. Pueden recordar en cierto modo a los <em>bary mleczne</em> de Polonia: sitios informales donde se come cocina tradicional a precios generalmente económicos. Los horarios y la oferta varían, así que conviene comprobarlos antes de ir.</p>
+        </div>
+      </div>
+    </details>
+
+    <details id="ropa">
+      <summary>
+        <span class="rec-number">03</span>
+        <span class="rec-summary-title">Qué ropa llevar
+          <span class="rec-summary-subtitle">Cómo preparar la maleta para noviembre.</span>
+        </span>
+      </summary>
+
+      <div class="rec-panel">
+        <p>Tenerife tiene un clima suave, pero las temperaturas cambian según la zona, la altitud y el tiempo de cada día. Como orientación, en muchas zonas se pueden encontrar temperaturas aproximadas de 15–25 °C en noviembre, aunque no está garantizado.</p>
+
+        <div class="rec-tip-grid">
+          <article class="rec-tip"><h3>Ropa ligera</h3><p>Camisetas, pantalones cómodos y ropa fresca para los días soleados.</p></article>
+          <article class="rec-tip"><h3>Bañador y toalla</h3><p>Si el tiempo y el estado del mar acompañan, puede ser buen momento para disfrutar de la playa.</p></article>
+          <article class="rec-tip"><h3>Una chaqueta</h3><p>No la olvidéis: por la noche puede refrescar, especialmente con viento.</p></article>
+          <article class="rec-tip"><h3>Abrigo para la montaña</h3><p>El Teide y las zonas altas pueden ser mucho más fríos que la costa.</p></article>
+          <article class="rec-tip"><h3>Calzado cómodo</h3><p>Ideal para recorrer pueblos, miradores y senderos.</p></article>
+          <article class="rec-tip"><h3>Protección solar</h3><p>Incluid protector solar, gafas de sol y agua, incluso en días con temperaturas suaves.</p></article>
+        </div>
+      </div>
+    </details>
+
+    <details id="consejos">
+      <summary>
+        <span class="rec-number">04</span>
+        <span class="rec-summary-title">Consejos prácticos
+          <span class="rec-summary-subtitle">Supermercados, clima, carreteras y pequeños detalles.</span>
+        </span>
+      </summary>
+
+      <div class="rec-panel">
+        <div class="rec-tip-grid">
+          <article class="rec-tip"><h3>Supermercados</h3><p>HiperDino y SuperDino son cadenas habituales en Canarias. Podéis comprar agua, provisiones para las excursiones y productos locales.</p></article>
+          <article class="rec-tip"><h3>Microclimas</h3><p>Puede hacer sol en el sur y estar nublado en el norte. Comprobad la previsión de la zona que vayáis a visitar.</p></article>
+          <article class="rec-tip"><h3>Conducir por la isla</h3><p>Las carreteras de Anaga, Masca y el Teide pueden ser estrechas y sinuosas. Conducid con calma y calculad tiempo suficiente.</p></article>
+          <article class="rec-tip"><h3>Moneda y emergencias</h3><p>La moneda es el euro (€). El número europeo de emergencias es el 112.</p></article>
+          <article class="rec-tip"><h3>Consultar horarios</h3><p>Algunos establecimientos tradicionales tienen días de apertura limitados. Confirmad los horarios antes de desplazaros.</p></article>
+          <article class="rec-tip"><h3>Disfrutad sin prisas</h3><p>Dejad tiempo para parar en los miradores, explorar los pueblos y disfrutar de los paisajes.</p></article>
+        </div>
+      </div>
+    </details>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <a href="index.html" class="logo">ENRIQUE <span>ESPIGARES</span></a>
+  <p>© 2026 Enrique Espigares · Viajes personalizados</p>
+</footer>
+
+</body>
+</html>

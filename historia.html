@@ -1,0 +1,611 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Descubre la historia de Tenerife y seis curiosidades sobre la isla.">
+  <title>Historia de Tenerife | Familia Tacikowski</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+
+  <style>
+    .history-page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 55px 28px 90px;
+    }
+
+    .history-heading {
+      max-width: 820px;
+      margin: 0 auto 42px;
+      text-align: center;
+    }
+
+    .history-heading h1 {
+      margin: 12px 0 18px;
+    }
+
+    .history-heading > p:not(.eyebrow) {
+      line-height: 1.8;
+      color: #626b64;
+    }
+
+    .history-intro {
+      max-width: 900px;
+      margin: 0 auto 65px;
+      padding: 38px 42px;
+      background: #fff;
+      border: 1px solid rgba(32, 53, 45, 0.12);
+      border-radius: 5px;
+    }
+
+    .history-intro h2 {
+      margin: 0 0 20px;
+      font-size: 27px;
+      color: #243d30;
+    }
+
+    .history-intro p {
+      margin: 0;
+      color: #626b64;
+      font-size: 15px;
+      line-height: 1.95;
+    }
+
+    .history-facts-heading {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .history-facts-heading h2 {
+      margin: 10px 0 12px;
+      font-size: clamp(27px, 3vw, 36px);
+      color: #243d30;
+    }
+
+    .history-facts-heading > p:not(.eyebrow) {
+      max-width: 650px;
+      margin: 0 auto;
+      color: #626b64;
+      line-height: 1.8;
+    }
+
+    .history-facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .history-fact {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 225px;
+      padding: 27px 25px;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      background: #fff;
+      border: 1px solid rgba(32, 53, 45, 0.14);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease,
+                  border-color 0.2s ease;
+    }
+
+    .history-fact:hover {
+      transform: translateY(-4px);
+      border-color: #b69a60;
+      box-shadow: 0 12px 28px rgba(32, 53, 45, 0.09);
+    }
+
+    .history-fact:focus-visible {
+      outline: 2px solid #b69a60;
+      outline-offset: 4px;
+    }
+
+    .history-fact-number {
+      margin-bottom: 24px;
+      color: #9a8050;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .history-fact h3 {
+      margin: 0 0 12px;
+      color: #243d30;
+      font-size: 21px;
+      line-height: 1.35;
+    }
+
+    .history-fact p {
+      margin: 0;
+      color: #626b64;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .history-fact-link {
+      margin-top: auto;
+      padding-top: 20px;
+      color: #617b67;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Ventana emergente de curiosidades */
+    .fact-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(20, 31, 25, 0.65);
+      backdrop-filter: blur(4px);
+    }
+
+    .fact-modal.is-open {
+      display: flex;
+    }
+
+    .fact-modal-dialog {
+      position: relative;
+      width: 100%;
+      max-width: 590px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 44px 42px 38px;
+      background: #faf9f5;
+      border: 1px solid rgba(182, 154, 96, 0.5);
+      border-radius: 6px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+      animation: fact-appear 0.22s ease-out;
+    }
+
+    .fact-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(32, 53, 45, 0.15);
+      border-radius: 50%;
+      background: transparent;
+      color: #243d30;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .fact-modal-close:hover {
+      background: #eae9e1;
+    }
+
+    .fact-modal-number {
+      margin: 0 0 15px;
+      color: #9a8050;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .fact-modal-dialog h2 {
+      margin: 0 35px 20px 0;
+      color: #243d30;
+      font-size: clamp(25px, 4vw, 33px);
+      line-height: 1.2;
+    }
+
+    .fact-modal-body {
+      color: #626b64;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .fact-modal-body p {
+      margin: 0 0 15px;
+    }
+
+    .fact-modal-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .fact-modal-body a {
+      color: #496c53;
+      font-weight: 700;
+      text-underline-offset: 3px;
+    }
+
+    body.fact-modal-open {
+      overflow: hidden;
+    }
+
+    @keyframes fact-appear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 850px) {
+      .history-facts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .history-page {
+        padding: 36px 16px 60px;
+      }
+
+      .history-intro {
+        padding: 27px 23px;
+        margin-bottom: 48px;
+      }
+
+      .history-intro h2 {
+        font-size: 24px;
+      }
+
+      .history-intro p {
+        font-size: 14px;
+        line-height: 1.85;
+      }
+
+      .history-facts {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .history-fact {
+        min-height: auto;
+        padding: 23px;
+      }
+
+      .history-fact-number {
+        margin-bottom: 15px;
+      }
+
+      .history-fact-link {
+        padding-top: 16px;
+      }
+
+      .fact-modal-dialog {
+        padding: 40px 24px 28px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .history-fact,
+      .fact-modal-dialog {
+        animation: none;
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">ENRIQUE <span>ESPIGARES</span></a>
+
+    <nav class="navigation">
+      <a href="itinerario.html">Itinerario</a>
+      <a href="recomendaciones.html">Recomendaciones</a>
+      <a href="historia.html">Historia</a>
+      <button id="contact-toggle" class="contact-button">Contacto</button>
+      <button id="language-toggle" class="language-button">PL</button>
+    </nav>
+  </header>
+
+  <main class="history-page">
+
+    <section class="history-heading">
+      <p class="eyebrow">HISTORIA Y CULTURA</p>
+      <h1>Una isla con mucha historia</h1>
+      <p>
+        Detrás de los paisajes volcánicos de Tenerife se esconde una historia
+        de antiguos pobladores, exploraciones, comercio y acontecimientos
+        que han dejado huella hasta nuestros días.
+      </p>
+    </section>
+
+    <section class="history-intro">
+      <h2>La historia de Tenerife</h2>
+
+      <p>
+        La historia de Tenerife está profundamente ligada a su origen
+        volcánico y a su posición estratégica en el océano Atlántico. La isla
+        se formó hace millones de años mediante sucesivas erupciones volcánicas,
+        que dieron lugar a paisajes tan característicos como el Parque Nacional
+        del Teide, cuya cumbre alcanza aproximadamente los 3.718 metros.
+        Antes de la conquista castellana, iniciada en 1494 y finalizada en 1496,
+        estaba habitada por los guanches, organizados en nueve territorios
+        gobernados por menceyes. Tras su incorporación a la Corona de Castilla,
+        Tenerife adquirió importancia como escala en las rutas marítimas entre
+        Europa, África y América, contribuyendo al comercio con los territorios
+        españoles de ultramar. La agricultura, especialmente el cultivo de la
+        caña de azúcar y la vid, también tuvo un papel fundamental en su
+        desarrollo económico. A lo largo de los siglos, la isla vivió
+        acontecimientos como la erupción de 1706, que destruyó gran parte del
+        puerto de Garachico, y la expedición británica de 1797, durante la cual
+        el almirante Nelson perdió un brazo al intentar conquistar Santa Cruz.
+        En julio de 1936, Tenerife volvió a ocupar un lugar destacado en la
+        historia de España: Francisco Franco, entonces comandante general de
+        Canarias, participó en los preparativos de la sublevación militar contra
+        la Segunda República. El levantamiento triunfó en el archipiélago el
+        18 de julio, aunque había comenzado el día anterior en Melilla. Franco,
+        que se encontraba en Gran Canaria, partió posteriormente hacia el norte
+        de África para ponerse al mando de las tropas sublevadas. En la
+        actualidad, Tenerife combina su patrimonio histórico y cultural con una
+        extraordinaria diversidad natural, fruto de su origen volcánico, y se
+        ha convertido en uno de los principales destinos turísticos de España.
+      </p>
+    </section>
+
+    <section class="history-facts-section">
+      <div class="history-facts-heading">
+        <p class="eyebrow">¿SABÍAS QUE...?</p>
+        <h2>Seis curiosidades de Tenerife</h2>
+        <p>
+          Desde sus montañas y sus cielos estrellados hasta sus particularidades
+          fiscales y los misterios de sus profundidades. Pulsa en cada tarjeta
+          para descubrir más.
+        </p>
+      </div>
+
+      <div class="history-facts">
+
+        <button class="history-fact" type="button"
+          data-fact="fact-teide" aria-haspopup="dialog">
+          <span class="history-fact-number">01 / NATURALEZA</span>
+          <h3>El techo de España</h3>
+          <p>El Teide supera en altura a cualquier montaña de la Península.</p>
+          <span class="history-fact-link">Descubrir curiosidad ↗</span>
+        </button>
+
+        <button class="history-fact" type="button"
+          data-fact="fact-tax" aria-haspopup="dialog">
+          <span class="history-fact-number">02 / VIDA LOCAL</span>
+          <h3>Un impuesto diferente</h3>
+          <p>Canarias tiene un régimen fiscal propio y no aplica el IVA peninsular.</p>
+          <span class="history-fact-link">Descubrir curiosidad ↗</span>
+        </button>
+
+        <button class="history-fact" type="button"
+          data-fact="fact-climate" aria-haspopup="dialog">
+          <span class="history-fact-number">03 / CLIMA</span>
+          <h3>Varias estaciones en un día</h3>
+          <p>La costa soleada y las cumbres frías pueden convivir en la misma jornada.</p>
+          <span class="history-fact-link">Descubrir curiosidad ↗</span>
+        </button>
+
+        <button class="history-fact" type="button"
+          data-fact="fact-stars" aria-haspopup="dialog">
+          <span class="history-fact-number">04 / ASTRONOMÍA</span>
+          <h3>Una ventana al universo</h3>
+          <p>Los cielos de Tenerife son ideales para observar las estrellas.</p>
+          <span class="history-fact-link">Descubrir curiosidad ↗</span>
+        </button>
+
+        <button class="history-fact" type="button"
+          data-fact="fact-fish" aria-haspopup="dialog">
+          <span class="history-fact-number">05 / MISTERIOS DEL MAR</span>
+          <h3>El extraño pez diablo negro</h3>
+          <p>En 2025 apareció cerca de la superficie un pez que vive normalmente en las profundidades.</p>
+          <span class="history-fact-link">Descubrir curiosidad ↗</span>
+        </button>
+
+        <button class="history-fact" type="button"
+          data-fact="fact-drago" aria-haspopup="dialog">
+          <span class="history-fact-number">06 / PATRIMONIO NATURAL</span>
+          <h3>El legendario Drago Milenario</h3>
+          <p>Uno de los árboles más emblemáticos y reconocibles de Canarias.</p>
+          <span class="history-fact-link">Descubrir curiosidad ↗</span>
+        </button>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>ENRIQUE ESPIGARES · Descubriendo Tenerife</p>
+  </footer>
+
+  <!-- Contenido de las ventanas emergentes -->
+  <div class="fact-modal" id="fact-modal"
+       role="dialog" aria-modal="true"
+       aria-labelledby="fact-modal-title"
+       aria-describedby="fact-modal-body"
+       aria-hidden="true">
+
+    <div class="fact-modal-dialog">
+      <button class="fact-modal-close" type="button"
+        aria-label="Cerrar ventana">&times;</button>
+
+      <p class="fact-modal-number" id="fact-modal-number"></p>
+      <h2 id="fact-modal-title"></h2>
+      <div class="fact-modal-body" id="fact-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Textos de las seis curiosidades -->
+  <div hidden id="fact-content">
+
+    <article id="fact-teide"
+      data-number="01 / NATURALEZA"
+      data-title="El techo de España">
+      <p>
+        El Teide alcanza aproximadamente los 3.718 metros sobre el nivel del
+        mar y es el punto más alto de España. El Mulhacén, situado en Sierra
+        Nevada, alcanza unos 3.479 metros y es la cima más alta de la España
+        peninsular.
+      </p>
+      <p>
+        Además de sus rutas de montaña, Sierra Nevada es conocida por su
+        estación de esquí. En Tenerife, en cambio, el gran protagonista es el
+        paisaje volcánico del Teide, donde incluso puede nevar durante el
+        invierno.
+      </p>
+    </article>
+
+    <article id="fact-tax"
+      data-number="02 / VIDA LOCAL"
+      data-title="Un impuesto diferente">
+      <p>
+        Canarias cuenta con un régimen fiscal propio. En lugar del IVA que se
+        aplica en la Península, existe el IGIC, el Impuesto General Indirecto
+        Canario. Su tipo general es del 7 %, aunque hay productos y servicios
+        sujetos a otros tipos.
+      </p>
+      <p>
+        Por eso, algunos artículos pueden tener precios distintos a los de la
+        Península. Sin embargo, no significa que todo sea necesariamente más
+        barato: también influyen el transporte, la marca y el establecimiento.
+      </p>
+    </article>
+
+    <article id="fact-climate"
+      data-number="03 / CLIMA"
+      data-title="Varias estaciones en un día">
+      <p>
+        La altitud y el relieve de Tenerife generan una gran variedad de
+        microclimas. Mientras en la costa se puede disfrutar de temperaturas
+        suaves y sol, en las zonas altas las condiciones pueden ser mucho más
+        frías, especialmente en invierno.
+      </p>
+      <p>
+        Por eso, visitar el Teide requiere llevar algo de abrigo incluso cuando
+        hace buen tiempo junto al mar. En las cumbres puede aparecer nieve,
+        mientras que las playas siguen disfrutando de un clima templado.
+      </p>
+    </article>
+
+    <article id="fact-stars"
+      data-number="04 / ASTRONOMÍA"
+      data-title="Una ventana al universo">
+      <p>
+        Tenerife es un lugar destacado para observar el cielo nocturno gracias
+        a su altitud, la frecuencia de cielos despejados y las condiciones
+        atmosféricas de las zonas altas.
+      </p>
+      <p>
+        En la isla se encuentra el Observatorio del Teide, un centro científico
+        dedicado a la investigación astronómica. Lejos de las luces de las
+        ciudades, las noches despejadas permiten contemplar una cantidad
+        impresionante de estrellas.
+      </p>
+    </article>
+
+    <article id="fact-fish"
+      data-number="05 / MISTERIOS DEL MAR"
+      data-title="El extraño pez diablo negro">
+      <p>
+        En enero de 2025 se observó cerca de la superficie, frente a Tenerife,
+        un ejemplar de diablo negro
+        (<em>Melanocetus johnsonii</em>), un pez que normalmente habita a
+        grandes profundidades, donde apenas llega la luz solar.
+      </p>
+      <p>
+        Su aparición fue extraordinaria porque estos peces rara vez se observan
+        vivos tan cerca de la superficie. El ejemplar fue entregado al Museo de
+        Naturaleza y Arqueología de Tenerife (MUNA) para su estudio científico.
+      </p>
+      <p>
+        <a href="https://www.museosdetenerife.org/muna-museo-de-naturaleza-y-arqueologia/el-muna-recibe-la-donacion-del-pez-diablo-negro-capturado-en-aguas-de-tenerife/"
+           target="_blank" rel="noopener noreferrer">
+          Leer la información del museo ↗
+        </a>
+      </p>
+    </article>
+
+    <article id="fact-drago"
+      data-number="06 / PATRIMONIO NATURAL"
+      data-title="El legendario Drago Milenario">
+      <p>
+        En Icod de los Vinos se encuentra el famoso Drago Milenario, uno de los
+        símbolos naturales más conocidos de Tenerife. Su silueta característica
+        y su enorme tamaño lo convierten en una visita muy representativa de la
+        flora canaria.
+      </p>
+      <p>
+        Aunque se le conoce como milenario, su edad exacta no está establecida
+        con certeza y ha sido objeto de debate. En cualquier caso, es un árbol
+        emblemático que forma parte del patrimonio natural y cultural de la isla.
+      </p>
+    </article>
+
+  </div>
+
+  <script>
+    (() => {
+      const modal = document.getElementById("fact-modal");
+      const modalTitle = document.getElementById("fact-modal-title");
+      const modalNumber = document.getElementById("fact-modal-number");
+      const modalBody = document.getElementById("fact-modal-body");
+      const closeButton = modal.querySelector(".fact-modal-close");
+      const factButtons = document.querySelectorAll("[data-fact]");
+
+      let previousFocus = null;
+
+      function openFact(button) {
+        const source = document.getElementById(button.dataset.fact);
+        if (!source) return;
+
+        previousFocus = button;
+
+        modalNumber.textContent = source.dataset.number;
+        modalTitle.textContent = source.dataset.title;
+        modalBody.replaceChildren();
+
+        Array.from(source.children).forEach((element) => {
+          modalBody.appendChild(element.cloneNode(true));
+        });
+
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("fact-modal-open");
+
+        closeButton.focus();
+      }
+
+      function closeFact() {
+        if (!modal.classList.contains("is-open")) return;
+
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("fact-modal-open");
+
+        if (previousFocus) previousFocus.focus();
+      }
+
+      factButtons.forEach((button) => {
+        button.addEventListener("click", () => openFact(button));
+      });
+
+      closeButton.addEventListener("click", closeFact);
+
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) closeFact();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeFact();
+      });
+    })();
+  </script>
+
+</body>
+</html>
